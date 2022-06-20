@@ -7,6 +7,8 @@ import Header from './components/header/Header';
 import Home from './components/home/Home';
 import Checkout from './components/checkout/Checkout';
 import Login from './components/login/Login';
+import Payment from './components/payment/Payment';
+
 import { auth } from './firebase';
 import { useStateValue } from './context/StateProvider';
 
@@ -38,6 +40,7 @@ const App = () => {
         <Route path="/" element={<><Header/><Home/></>}/>
         <Route path="/login" element={<Login />}/>
         <Route path="/checkout" element={<><Header/><Checkout/></>} exact/>
+        <Route path="/payment" element={<><Header/><Payment/></>} exact/>
       </Routes>
     </Router>
   </div>
