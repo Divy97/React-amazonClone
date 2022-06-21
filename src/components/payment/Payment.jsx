@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "./Payment.css";
 import CurrencyFormat from "react-currency-format";
 import { useNavigate  } from "react-router-dom";
-import axios from '../../axios';
+import axios from '../../axios';  
 //stripe
 
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
@@ -15,7 +15,7 @@ import { getBasketTotal } from "../../context/reducer";
 const Payment = () => {
 
   let navigate = useNavigate();
-  const [{ basket, user }] = useStateValue();
+  const [{ basket, user }, dispatch] = useStateValue();
 
   const [succeeded, setSucceeded] = useState(false);
   const [processing, setProcessing] = useState('');
@@ -31,7 +31,6 @@ const Payment = () => {
         }); 
         setClientSecret(response.data.clientSecret);
     }
-
     getClientSecret();
   },[basket])
 
@@ -45,16 +44,17 @@ const Payment = () => {
     setProcessing(true);
 
     const payload = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-            card: elements.getElement(CardElement) 
-        }
+      payment_method: {
+          card: elements.getElement(CardElement)
+      }
     }).then(({ paymentIntent }) => {
-
         setSucceeded(true);
         setError(null);
-        setProcessing(false);
-
-        navigate('/orders', { replace: true });
+        setProcessing(false); 
+        dispatch({
+          type: 'EMPTY_BASKET'
+        })
+        navigate('/order', { replace: true });
     })
   };
 
